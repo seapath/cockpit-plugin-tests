@@ -1,0 +1,13 @@
+[project]
+org='sfl'
+name='cockpit-plugin-test'
+flavors='all_tests dashboard_tests'
+
+[build]
+command='python3 main.py'
+
+[all_tests]
+command='python3 main.py'
+
+[dashboard_tests]
+command='python3 -m unittest tests/TestClusterDashboard.py'
