@@ -30,11 +30,13 @@ $ sudo make install
 
 NOTE: The step above is only required once
 
-`cqfd run xvfb-run -b <flavour_name>`
+`cqfd -b <flavour_name>`
 
 List of flavours:
 - all_tests
 - dashboard_tests
+- update_tests
+- vm_management_tests
 
 
 ## Run the tests without cqfd

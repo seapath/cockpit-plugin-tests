@@ -1,13 +1,19 @@
 [project]
 org='sfl'
 name='cockpit-plugin-test'
-flavors='all_tests dashboard_tests'
+flavors='all_tests dashboard_tests update_tests vm_management_tests'
 
 [build]
-command='python3 main.py'
+command='xvfb-run python3 main.py'
 
 [all_tests]
-command='python3 main.py'
+command='xvfb-run python3 main.py'
 
 [dashboard_tests]
-command='python3 -m unittest tests/TestClusterDashboard.py'
+command='xvfb-run python3 -m unittest tests/TestClusterDashboard.py'
+
+[update_tests]
+command='xvfb-run python3 -m unittest tests/TestUpdate.py'
+
+[vm_management_tests]
+command='xvfb-run python3 -m unittest tests/TestClusterVmManagement.py'
