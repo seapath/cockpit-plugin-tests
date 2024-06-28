@@ -1,0 +1,26 @@
+# Copyright (C) 2024, SFL (https://savoirfairelinux.com)
+# SPDX-License-Identifier: Apache-2.0
+
+---
+- name: Install plugins
+  block:
+  - name: copy plugin (dashboard)
+    ansible.builtin.copy:
+      src: "{{ cockpit_plugins_location }}/cockpit-cluster-dashboard/dist/"
+      dest: "{{ cockpit_plugin_installation_path }}/cockpit-cluster-dashboard"
+      mode: '644'
+      owner: root
+
+  - name: copy plugin (update)
+    ansible.builtin.copy:
+      src: "{{cockpit_plugins_location}}/cockpit-update/dist/"
+      dest: "{{ cockpit_plugin_installation_path }}/cockpit-cluster-update"
+      mode: '644'
+      owner: root
+
+  - name: copy plugin (vm management)
+    ansible.builtin.copy:
+      src: "{{cockpit_plugins_location}}/cockpit-cluster-vm-management/dist/"
+      dest: "{{ cockpit_plugin_installation_path }}/cockpit-cluster-vm-management"
+      mode: '644'
+      owner: root
