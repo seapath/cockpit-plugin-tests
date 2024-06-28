@@ -1,6 +1,8 @@
 # Copyright (C) 2024 Savoir-faire Linux Inc.
 # SPDX-License-Identifier: Apache-2.0
 
+import os
+
 # Global variables
 COCKPIT_URL = "https://192.168.216.137:9090"
 COCKPIT_USERNAME = "virtu"
@@ -40,6 +42,12 @@ RESOURCE_CLONED_DEFAULT_HOST = "-"
 
 RESOURCES_LOGS = ""
 
+def load_environment_variables():
+    global HOST_1_IP, HOST_2_IP, HOST_3_IP
+    HOST_1_IP = os.getenv("HOST_1_IP", HOST_1_IP)
+    HOST_2_IP = os.getenv("HOST_2_IP", HOST_2_IP)
+    HOST_3_IP = os.getenv("HOST_3_IP", HOST_3_IP)
+
 def dashboard_variables():
     global ONLINE_NODES, OFFLINE_NODES, CLUSTER_STATUS, CLUSTER_LOGS
 
@@ -49,6 +57,7 @@ def dashboard_variables():
     CLUSTER_STATUS = "CLUSTER WARN" if OFFLINE_NODES else "CLUSTER OK"
     CLUSTER_LOGS = f"offline node: {OFFLINE_NODES}" if OFFLINE_NODES else ""
 
+load_environment_variables()
 dashboard_variables()
 
 
