@@ -13,7 +13,7 @@ A configuration file is provided on the utils/ directory and contains all the gl
 
 Host IP can be configured with the `HOST_X_IP` environment variables.
 
-## Run the tests with cqfd
+## Cqfd
 
 [cqfd](https://github.com/savoirfairelinux/cqfd) is a quick and convenient way to run commands in the current directory, but within a pre-defined Docker container.
 cqfd is used with Xvfb to run selenium without display.
@@ -26,11 +26,36 @@ $ cd cqfd
 $ sudo make install
 ```
 
-* Use cqfd
+* Initialize cqfd
 
 `cqfd init`
 
-NOTE: The step above is only required once
+NOTE: The cluster configuration and Selenium tests use both cqfd with different docker containers.
+Each of them will require executing the command below once.
+
+## Configure the cluster
+
+- Flash all the hosts with a [Seapath Debian image](https://github.com/seapath/build_debian_iso) containing Cockpit
+- Clone the repository [Seapath ansible](https://github.com/seapath/ansible) and checkout on the debian-main branch
+- Move or clone the cockpit-plugin-tests repository in the ansible/tests directory
+- Deploy the cluster and install the 3 plugins
+```
+$ cd ansible
+$ cqfd init
+$ cqfd run ansible-playbook -i tests/cockpit-plugin-tests/ansible/inventory/cluster_definition.yml --skip-tags "package-install" tests/cockpit-plugin-tests/ansible/deploy_cluster_test_plugins.yml
+```
+- Deploy a VM
+```
+$ cqfd run ansible-playbook -i tests/cockpit-plugin-tests/ansible/inventory/cluster_definition.yml -i tests/cockpit-plugin-tests/ansible/inventory/vm_definition.yml playbooks/deploy_vms_cluster.yaml
+```
+- Shutdown one of the host
+
+NOTE: to restart the host remotely, you will need the wakeonlan package and the following command:
+```
+$ wakeonlan <MAC_ADDRESS>
+```
+
+## Run the tests with cqfd
 
 `cqfd -b <flavour_name>`
 
