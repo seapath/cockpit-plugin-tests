@@ -1,0 +1,23 @@
+# Copyright (C) 2020-2024, RTE (http://www.rte-france.com)
+# Copyright (C) 2023-2024, SFL (https://savoirfairelinux.com)
+# SPDX-License-Identifier: Apache-2.0
+
+---
+all:
+  children:
+    VMs:
+      hosts:
+        guest3:
+          description: "Simple VM"
+          ansible_host: 192.168.216.138
+          vm_template: "../templates/vm/guest.xml.j2"
+          pinned_host: nuc3
+          vm_disk: "../src/cockpit-plugin-tests/ansible/roles/cockpit_plugins_cluster_setup/files/Yocto.qcow2"
+          disk_extract: false
+          vm_features: []
+          bridges:
+            - name: "br0"
+              mac_address: "52:54:00:c4:f9:34"
+      vars:
+        ansible_user: virtu
+        ip_addr: "{{ ansible_host }}"
