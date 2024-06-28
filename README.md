@@ -11,6 +11,8 @@ This is a Selenium project written in Python to test the following Cockpit plugi
 
 A configuration file is provided on the utils/ directory and contains all the global variables that can be configured.
 
+Host IP can be configured with the `HOST_X_IP` environment variables.
+
 ## Run the tests with cqfd
 
 [cqfd](https://github.com/savoirfairelinux/cqfd) is a quick and convenient way to run commands in the current directory, but within a pre-defined Docker container.
