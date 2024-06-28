@@ -1,0 +1,18 @@
+# Copyright (C) 2024, SFL (https://savoirfairelinux.com)
+# SPDX-License-Identifier: Apache-2.0
+
+---
+- name: Fetch plugins
+  block:
+    - name: Clone Cockpit cluster dashboard repository
+      ansible.builtin.git:
+        repo: https://github.com/seapath/cockpit-cluster-dashboard
+        dest:  "{{ cockpit_plugins_location }}/cockpit-cluster-dashboard"
+    - name: Clone Cockpit update repository
+      ansible.builtin.git:
+        repo: https://github.com/seapath/cockpit-update
+        dest: "{{ cockpit_plugins_location }}/cockpit-update"
+    - name: Clone Cockpit cluster vm management repository
+      ansible.builtin.git:
+        repo: https://github.com/seapath/cockpit-cluster-vm-management
+        dest:  "{{ cockpit_plugins_location }}/cockpit-cluster-vm-management"

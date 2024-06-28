@@ -1,0 +1,6 @@
+# Copyright (C) 2024, SFL (https://savoirfairelinux.com)
+# SPDX-License-Identifier: Apache-2.0
+
+---
+cockpit_plugin_installation_path: "/usr/share/cockpit"
+cockpit_plugins_location: "../../.."
