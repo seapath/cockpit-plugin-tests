@@ -1,0 +1,40 @@
+# Copyright (C) 2024 Savoir-faire Linux, Inc.
+# SPDX-License-Identifier: Apache-2.0
+
+---
+# ansible_repository_path can be set in the inventory or via the argument "-e"
+- import_playbook: "{{ ansible_repository_path | default('../../../..') }}/playbooks/cluster_setup_debian.yaml"
+
+- name: Fetch and build plugins
+  hosts:
+      - builder
+  vars_files:
+    - roles/cockpit_plugins_cluster_setup/vars/main.yml
+  tasks:
+      - name: Cockpit plugins installation
+        include_tasks: roles/cockpit_plugins_cluster_setup/tasks/fetch_plugins.yml
+
+      - name: Cockpit plugins installation
+        include_tasks: roles/cockpit_plugins_cluster_setup/tasks/build_plugins.yml
+
+- name: Configure the cluster for Cockpit plugins testing
+  hosts:
+      - cluster_machines
+  vars_files:
+    - roles/cockpit_plugins_cluster_setup/vars/main.yml
+  tasks:
+      - name: Check if cockpit is installed
+        command: which cockpit-bridge
+        register: cockpit_status
+
+      - name: Cockpit plugins installation
+        become: true
+        block:
+          - include_tasks: roles/cockpit_plugins_cluster_setup/tasks/deploy_plugins_cluster.yml
+        when: cockpit_status.rc == 0
+
+        # For Selenium tests purposes
+      - name: Shutdown one of the host
+        command: "shutdown now"
+        become: true
+        when: inventory_hostname == 'nuc3'
