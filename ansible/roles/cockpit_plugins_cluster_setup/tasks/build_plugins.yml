@@ -1,0 +1,12 @@
+# Copyright (C) 2024, SFL (https://savoirfairelinux.com)
+# SPDX-License-Identifier: Apache-2.0
+
+---
+- name: build plugins
+  block:
+    - name: Build Cockpit cluster dashboard
+      command: "npm run init --prefix {{ cockpit_plugins_location }}/cockpit-cluster-dashboard"
+    - name: Build Cockpit update
+      command: "npm run init --prefix {{ cockpit_plugins_location }}/cockpit-update"
+    - name: Build Cockpit cluster vm management
+      command: "npm run init --prefix {{ cockpit_plugins_location }}/cockpit-cluster-vm-management"
