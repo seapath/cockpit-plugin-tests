@@ -3,7 +3,7 @@
 
 ---
 # ansible_repository_path can be set in the inventory or via the argument "-e"
-- import_playbook: "{{ ansible_repository_path | default('../../../..') }}/playbooks/cluster_setup_debian.yaml"
+- import_playbook: "{{ ansible_repository_path | default('../../..') }}/playbooks/cluster_setup_debian.yaml"
 
 - name: Fetch and build plugins
   hosts:
