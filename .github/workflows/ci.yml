@@ -1,0 +1,50 @@
+name: CI Cockpit plugins
+
+env:
+  WORK_DIR: /tmp/seapath_ci_${{ github.run_id }}_${{ github.run_attempt }}_${{ github.sha }}
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+    branches: [main]
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  actions: write
+  checks: write
+
+jobs:
+  setup:
+    runs-on: runner-SFL
+
+    steps:
+    - name: Initialize sources
+      run: |
+        mkdir ${{ env.WORK_DIR }}; cd ${{ env.WORK_DIR }};
+        git clone -q -b debian-main https://github.com/seapath/ansible.git ansible;
+        ####### -- Lien avec qcow2 (ln) qui doit être placé dans le runner à une place fixe
+        git clone -q -b main https://github.com/seapath/cockpit-plugin-tests.git ansible/tests/cockpit-plugin-tests;
+        echo "CI sources downloaded successfully";
+
+    - name: Configure the cluster & deploy a VM
+      run: |
+        cd ${{ env.WORK_DIR }}/ansible;
+        cqfd init;
+        cqfd -b prepare;
+        cqfd run ansible-playbook -i tests/cockpit-plugin-tests/ansible/inventory/cluster_definition.yml --skip-tags "package-install" tests/cockpit-plugin-tests/ansible/deploy_cluster_test_plugins.yml;
+        cqfd run ansible-playbook -i tests/cockpit-plugin-tests/ansible/inventory/cluster_definition.yml -i tests/cockpit-plugin-tests/ansible/inventory/vm_definition.yml playbooks/deploy_vms_cluster.yaml;
+
+    - name: Launch Cockpit plugins tests
+      run: |
+        cd ${{ env.WORK_DIR }}/ansible/tests/cockpit-plugin-tests;
+        cqfd init
+        cqfd -b all_tests
+
+    - name: Wake up the shutdown host
+      run: |
+        wakeonlan 54:B2:03:9F:50:8A
+
+    - name: Clean
+      run: rm -rf ${{ env.WORK_DIR }};
+
